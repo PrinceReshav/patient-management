@@ -1,0 +1,23 @@
+# IntelliJ / IDE
+.idea/
+*.iml
+.vscode/
+
+# Maven / Gradle
+**/target/
+**/build/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+*.env
+
+# Docker volumes / runtime data
+**/data/
+**/logs/

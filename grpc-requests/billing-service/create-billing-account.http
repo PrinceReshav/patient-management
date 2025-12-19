@@ -1,0 +1,18 @@
+### GET request to example server
+
+
+GRPC localhost:9001/BillingService/CreateBillingAccount
+
+{
+  "patientId": "12333",
+  "name" : "John Doe",
+  "email" : "john.doe@example.com"
+}
+
+###
+
+### localhost:9001 → gRPC server address and port
+
+### BillingService → name of your gRPC service (from .proto)
+
+### CreateBillingAccount → name of the RPC method inside that service
