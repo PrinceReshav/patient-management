@@ -4,8 +4,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Shiv humaare",
-  "email": "visnubhi@example.com",
+  "name": "Hari Om Prabhu",
+  "email": "hariomprabhu@example.com",
   "address": "1234 main street",
   "dateOfBirth": "1994-09-09",
   "registeredDate": "2025-11-14"

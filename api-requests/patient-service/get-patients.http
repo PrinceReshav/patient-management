@@ -1,5 +1,4 @@
 ### GET request to get all patients
-GET http://lb-16c309ef.elb.localhost.localstack.cloud:4004/api/patients?page=1&size=10&sort=asc
-#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2MzY2MTc3OCwiZXhwIjoxNzYzNjk3Nzc4fQ.pKfTWymvavoltmDQUEYmwTagr2Rf95zXO18chJ888IE
+GET http://localhost:4004/api/patients?page=1&size=10&sort=asc
 Authorization: Bearer {{token}}
 ###

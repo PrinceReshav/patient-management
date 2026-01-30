@@ -45,7 +45,7 @@ public class PatientController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new patient") // SWAGGEDR-UI
+    @Operation(summary = "Create a new patient") // SWAGGER-UI
     public ResponseEntity<PatientResponseDTO> createPatient(@Validated({Default.class, CreatePatientValidationGroup.class})
         @RequestBody PatientRequestDTO patientRequestDTO) {
         PatientResponseDTO patientResponseDTO = patientService.createPatient(patientRequestDTO);

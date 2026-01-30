@@ -1,0 +1,4 @@
+### GET patient details based on time slot
+GET http://localhost:4006/appointments?from=2025-02-01T00:00:00&to=2026-02-02T00:00:00
+
+###

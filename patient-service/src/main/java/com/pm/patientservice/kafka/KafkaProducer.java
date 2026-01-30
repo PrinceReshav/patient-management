@@ -17,26 +17,38 @@ public class KafkaProducer {
     public KafkaProducer(KafkaTemplate<String, byte[]> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
+
+
 // Anytime we want to send an event to kafka topic we need to know some info about patient coming from 'patient object'
-    public void sendEvent(Patient patient) {
+public void sendPatientCreatedEvent(Patient patient) {
+    PatientEvent event = PatientEvent.newBuilder()
+            .setPatientId(patient.getId().toString())
+            .setName(patient.getName())
+            .setEmail(patient.getEmail())
+            .build();
+
+    try {
+        kafkaTemplate.send("patient.created", event.toByteArray());
+    } catch (Exception e) {
+        log.error("Error sending PatientCreated event: {}", event);
+    }
+}
+
+    public void sendPatientUpdatedEvent(Patient patient) {
         PatientEvent event = PatientEvent.newBuilder()
                 .setPatientId(patient.getId().toString())
                 .setName(patient.getName())
                 .setEmail(patient.getEmail())
-                .setEventType("PATIENT_CREATED")
                 .build();
-        try{
-            log.info("Producing event: {}", event);
-            kafkaTemplate.send("patient",event.toByteArray()); // converts details from sendEvent to byteArray
-        }
-        catch(Exception e){
-            // even if sending of event fails, all previous steps should still work
-            log.error("Error sending PatientCreated event : {} ", event);
+
+        try {
+            kafkaTemplate.send("patient.updated", event.toByteArray());
+        } catch (Exception e) {
+            log.error("Error sending PatientUpdated event: {}", event);
         }
     }
-
-
-    public void sendBillingAccountEvent(String patientId, String name, String email) {
+    public void sendBillingAccountEvent(String patientId, String name,
+                                        String email) {
 
         BillingAccountEvent event = BillingAccountEvent.newBuilder()
                 .setPatientId(patientId)
@@ -46,10 +58,10 @@ public class KafkaProducer {
                 .build();
 
         try{
-            kafkaTemplate.send("billing-account",event.toByteArray()); // sends  billingAccounEvent to billingAccounTopic as byteArray , makes payload smaller
-        }
-        catch(Exception e){
-            log.error("Error sending BillingAccountCreated event : {} ", e.getMessage());
+            kafkaTemplate.send("billing-account", event.toByteArray());
+        } catch (Exception e) {
+            log.error("Error sending BillingAccountCreated event: {}", e.getMessage());
         }
     }
+
 }

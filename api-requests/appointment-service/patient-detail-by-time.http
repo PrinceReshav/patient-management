@@ -1,0 +1,4 @@
+### GET request for getting the details of a patient based in his patien-id
+GET http://localhost:4006/appointments/patient/dcdebf4c-bf42-4c39-9dc3-8219b73b4315
+
+###
