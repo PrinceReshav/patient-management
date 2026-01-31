@@ -1,10 +1,12 @@
 package com.pm.appointmentservice.service;
 
+import appointment.events.AppointmentEvent;
 import com.pm.appointmentservice.dto.AppointmentRequestDto;
 import com.pm.appointmentservice.dto.AppointmentResponseDto;
 import com.pm.appointmentservice.entity.Appointment;
 import com.pm.appointmentservice.entity.CachedPatient;
 import com.pm.appointmentservice.exception.InvalidTimeRangeException;
+import com.pm.appointmentservice.kafka.AppointmentKafkaProducer;
 import com.pm.appointmentservice.repository.AppointmentRepository;
 import com.pm.appointmentservice.repository.CachedPatientRepository;
 import java.time.LocalDate;
@@ -23,11 +25,13 @@ public class AppointmentService {
 
   private final AppointmentRepository appointmentRepository;
   private final CachedPatientRepository cachedPatientRepository;
+    private final AppointmentKafkaProducer appointmentKafkaProducer;
 
   public AppointmentService(AppointmentRepository appointmentRepository,
-      CachedPatientRepository cachedPatientRepository) {
+      CachedPatientRepository cachedPatientRepository, AppointmentKafkaProducer appointmentKafkaProducer) {
     this.appointmentRepository = appointmentRepository;
     this.cachedPatientRepository = cachedPatientRepository;
+    this.appointmentKafkaProducer = appointmentKafkaProducer;
   }
 
   public List<AppointmentResponseDto> getAppointmentsByDateRange(
@@ -114,7 +118,21 @@ public class AppointmentService {
 
         Appointment saved = appointmentRepository.save(appointment);
 
-        // 4. Return response
+        // 4. Publish Kafka event
+        AppointmentEvent event = AppointmentEvent.newBuilder()
+                .setAppointmentId(saved.getId().toString())
+                .setPatientId(patient.getId().toString())
+                .setPatientName(patient.getFullName())
+                .setPatientEmail(patient.getEmail())
+                .setAppointmentDate(saved.getStartTime().toLocalDate().toString())
+                .setAppointmentTime(saved.getStartTime().toLocalTime().toString())
+                .setDoctorName("Dr. Do Little") // notification service ignores anyway
+                .setEventType("CREATED")
+                .build();
+
+        appointmentKafkaProducer.publishAppointmentCreated(event);
+
+        // 5. Return response
         return new AppointmentResponseDto(
                 saved.getId(),
                 saved.getPatientId(),

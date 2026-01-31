@@ -3,9 +3,9 @@ POST http://localhost:4006/appointments
 Content-Type: application/json
 
 {
-  "patientId": "f0fbd006-3250-4cc5-999c-07b2a6b9a6ac",
-  "startTime": "2026-02-01T11:00:00",
-  "endTime": "2026-02-01T11:30:00",
+  "patientId": "ffba52ff-6ee1-4ef3-af5d-3ea1e92d5efa",
+  "startTime": "2026-02-04T11:30:00",
+  "endTime": "2026-02-04T12:00:00",
   "reason": "General Checkup"
 }
 

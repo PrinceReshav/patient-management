@@ -1,0 +1,7 @@
+spring:
+  kafka:
+    bootstrap-servers: dummy:9092
+    consumer:
+      enable-auto-commit: false
+    listener:
+      auto-startup: false

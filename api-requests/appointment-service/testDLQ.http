@@ -1,0 +1,5 @@
+### POST Testing
+POST http://localhost:4007/test/kafka/invalid-appointment
+
+
+###

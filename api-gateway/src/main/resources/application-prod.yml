@@ -1,41 +1,56 @@
 server:
-  port: 4004 # Gateway listens on port 4004
+  port: 4004
 
 spring:
   data:
     redis:
-      host: ${REDIS_HOST:redis}
-      port: ${REDIS_PORT:6379}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
   cloud:
     gateway:
       routes:
-        - id: auth-service-route
+
+        - id: auth-service
           uri: http://auth-service.patient-management.local:4005
           predicates:
             - Path=/auth/**
           filters:
             - StripPrefix=1
 
-        # Route for /api/patients/** to patient-service
-        - id: patient-service-route
+        - id: patient-service
           uri: http://patient-service.patient-management.local:4000
           predicates:
             - Path=/api/patients/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=2
             - JwtValidation
 
-        # Route for /api/docs/patients to patient-service /v3/api-docs
-        - id: api-docs-patient-route
+        - id: appointment-service
+          uri: http://appointment-service.patient-management.local:4006
+          predicates:
+            - Path=/api/appointments/**
+          filters:
+            - StripPrefix=2
+            - JwtValidation
+
+        - id: api-docs-patient
           uri: http://patient-service.patient-management.local:4000
           predicates:
             - Path=/api-docs/patients
           filters:
             - RewritePath=/api-docs/patients,/v3/api-docs
 
-        - id: api-docs-auth-route
+        - id: api-docs-auth
           uri: http://auth-service.patient-management.local:4005
           predicates:
             - Path=/api-docs/auth
           filters:
             - RewritePath=/api-docs/auth,/v3/api-docs
+
+        - id: api-docs-appointment
+          uri: http://appointment-service.patient-management.local:4006
+          predicates:
+            - Path=/api-docs/appointments
+          filters:
+            - RewritePath=/api-docs/appointments,/v3/api-docs

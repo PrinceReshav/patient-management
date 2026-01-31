@@ -1,5 +1,5 @@
 ### Delete an entity
-DELETE http://localhost:4004/api/patients/{id}
+DELETE http://localhost:4004/api/patients/3f6a4877-57ff-4cd4-a41e-5a44a4ff4ef6
 Authorization: Bearer {{token}}
 
 ###

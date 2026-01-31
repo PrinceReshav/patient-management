@@ -15,35 +15,59 @@ spring:
             - name: RequestRateLimiter
               args:
                 key-resolver: "#{@ipKeyResolver}"
-                redis-rate-limiter.burstCapacity: 5
                 redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 5
 
           routes:
-            - id: auth-service-route
+
+            # ================= AUTH SERVICE =================
+            - id: auth-service
               uri: http://auth-service:4005
               predicates:
                 - Path=/auth/**
               filters:
                 - StripPrefix=1
+                # /auth/login  -> /login
+                # /auth/validate -> /validate
 
-            - id: patient-service-route
+            # ================= PATIENT SERVICE =================
+            - id: patient-service
               uri: http://patient-service:4000
               predicates:
                 - Path=/api/patients/**
               filters:
-                - StripPrefix=1
+                - StripPrefix=2
                 - JwtValidation
+                # /api/patients -> /patients
 
-            - id: api-docs-patient-route
+            # ================= APPOINTMENT SERVICE =================
+            - id: appointment-service
+              uri: http://appointment-service:4006
+              predicates:
+                - Path=/api/appointments/**
+              filters:
+                - StripPrefix=2
+                - JwtValidation
+                # /api/appointments -> /appointments
+
+            # ================= SWAGGER =================
+            - id: api-docs-patient
               uri: http://patient-service:4000
               predicates:
                 - Path=/api-docs/patients
               filters:
                 - RewritePath=/api-docs/patients,/v3/api-docs
 
-            - id: api-docs-auth-route
+            - id: api-docs-auth
               uri: http://auth-service:4005
               predicates:
                 - Path=/api-docs/auth
               filters:
                 - RewritePath=/api-docs/auth,/v3/api-docs
+
+            - id: api-docs-appointment
+              uri: http://appointment-service:4006
+              predicates:
+                - Path=/api-docs/appointments
+              filters:
+                - RewritePath=/api-docs/appointments,/v3/api-docs

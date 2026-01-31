@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package appointment.events;
+
+option java_multiple_files = true;
+option java_package = "appointment.events";
+
+message AppointmentEvent {
+  string appointmentId = 1;
+  string patientId = 2;
+  string patientName = 3;
+  string patientEmail = 4;
+  string appointmentDate = 5;
+  string appointmentTime = 6;
+  string doctorName = 7;
+  string eventType = 8; // CREATED / CANCELLED
+}
